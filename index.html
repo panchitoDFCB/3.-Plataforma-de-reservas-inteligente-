@@ -14,7 +14,7 @@
       font-family: 'DM Sans', sans-serif;
     }
 
-    /* NAVBAR */
+    /* ===== NAVBAR ===== */
     .navbar {
       display: flex;
       justify-content: space-between;
@@ -45,7 +45,7 @@
       color: #38bdf8;
     }
 
-    /* HERO */
+    /* ===== HERO ===== */
     .hero {
       height: 90vh;
       background: linear-gradient(to right, #1e293b, #0f172a);
@@ -83,59 +83,75 @@
       transform: scale(1.05);
     }
 
-    /* SERVICES */
-.services {
-  padding: 60px 20px;
-  text-align: center;
-  background: #f8fafc;
-}
+    /* ===== SERVICES ===== */
+    .services {
+      padding: 60px 20px;
+      text-align: center;
+      background: #f8fafc;
+    }
 
-.services h2 {
-  font-size: 2rem;
-  margin-bottom: 40px;
-  font-family: 'Syne', sans-serif;
-}
+    .services h2 {
+      font-size: 2rem;
+      margin-bottom: 40px;
+      font-family: 'Syne', sans-serif;
+    }
 
-.cards {
-  display: flex;
-  gap: 30px;
-  justify-content: center;
-  flex-wrap: wrap;
-}
+    .cards {
+      display: flex;
+      gap: 30px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
 
-.card {
-  background: white;
-  width: 300px;
-  border-radius: 10px;
-  overflow: hidden;
-  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-  transition: 0.3s;
-}
+    .card {
+      background: white;
+      width: 300px;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+      transition: 0.3s;
+      cursor: pointer;
+    }
 
-.card img {
-  width: 100%;
-  height: 200px;
-  object-fit: cover;
-}
+    .card img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+    }
 
-.card h3 {
-  margin: 15px 0 10px;
-}
+    .card h3 {
+      margin: 15px 0 10px;
+    }
 
-.card p {
-  padding: 0 15px 20px;
-  color: #555;
-}
+    .card p {
+      padding: 0 15px 20px;
+      color: #555;
+    }
 
-.card:hover {
-  transform: translateY(-10px);
-  box-shadow: 0 20px 30px rgba(0,0,0,0.2);
-}
+    .card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 20px 30px rgba(0,0,0,0.2);
+    }
+
+    /* ===== DETAILS ===== */
+    .details {
+      padding: 60px 20px;
+      background: #0f172a;
+      color: white;
+      text-align: center;
+    }
+
+    .details-content {
+      max-width: 600px;
+      margin: auto;
+    }
+
   </style>
 </head>
 
 <body>
 
+  <!-- NAVBAR -->
   <header>
     <nav class="navbar">
       <h2 class="logo">BookSmart</h2>
@@ -147,38 +163,65 @@
     </nav>
   </header>
 
+  <!-- HERO -->
   <section class="hero">
-    <div class="hero-content">
+    <div>
       <h1>Reserva inteligente en segundos</h1>
       <p>Optimiza tu tiempo con nuestra plataforma moderna</p>
       <button>Comenzar</button>
     </div>
   </section>
+
+  <!-- SERVICES -->
   <section class="services">
-  <h2>Nuestros Servicios</h2>
+    <h2>Nuestros Servicios</h2>
 
-  <div class="cards">
+    <div class="cards">
 
-    <div class="card">
-      <img src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d" alt="Reservas">
-      <h3>Reservas rápidas</h3>
-      <p>Agenda en segundos sin complicaciones</p>
+      <div class="card" onclick="mostrarInfo('Reservas rápidas', 'Agenda tus citas en segundos con nuestro sistema optimizado.')">
+        <img src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d">
+        <h3>Reservas rápidas</h3>
+        <p>Agenda en segundos sin complicaciones</p>
+      </div>
+
+      <div class="card" onclick="mostrarInfo('Gestión inteligente', 'Organiza automáticamente tus horarios y evita conflictos.')">
+        <img src="https://images.unsplash.com/photo-1556740749-887f6717d7e4">
+        <h3>Gestión inteligente</h3>
+        <p>Organiza tus citas automáticamente</p>
+      </div>
+
+      <div class="card" onclick="mostrarInfo('Optimización', 'Mejora tu productividad con análisis inteligentes.')">
+        <img src="https://images.unsplash.com/photo-1519389950473-47ba0277781c">
+        <h3>Optimización</h3>
+        <p>Mejora tu productividad diaria</p>
+      </div>
+
     </div>
+  </section>
 
-    <div class="card">
-      <img src="https://images.unsplash.com/photo-1556740749-887f6717d7e4" alt="Gestión">
-      <h3>Gestión inteligente</h3>
-      <p>Organiza tus citas automáticamente</p>
+  <!-- DETAILS -->
+  <section class="details" id="details">
+    <div class="details-content" id="details-content">
+      <h2>Selecciona un servicio</h2>
+      <p>Haz clic en una tarjeta para ver más información aquí.</p>
     </div>
+  </section>
 
-    <div class="card">
-      <img src="https://images.unsplash.com/photo-1519389950473-47ba0277781c" alt="Optimización">
-      <h3>Optimización</h3>
-      <p>Mejora tu productividad diaria</p>
-    </div>
+  <!-- JS -->
+  <script>
+    function mostrarInfo(titulo, descripcion) {
+      const contenedor = document.getElementById("details-content");
 
-  </div>
-</section>
+      contenedor.innerHTML = `
+        <h2>${titulo}</h2>
+        <p>${descripcion}</p>
+      `;
+
+      document.getElementById("details").scrollIntoView({
+        behavior: "smooth"
+      });
+    }
+  </script>
 
 </body>
 </html>
