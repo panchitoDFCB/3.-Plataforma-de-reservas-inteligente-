@@ -1,227 +1,1107 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>BookSmart – Plataforma de Reservas Inteligente</title>
-
-  <!-- Fuentes -->
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
-
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet"/>
   <style>
+    /* ============================================================
+       VARIABLES & RESET
+    ============================================================ */
+    :root {
+      --bg:        #0b0f1a;
+      --surface:   #131828;
+      --card:      #1a2035;
+      --border:    #252d45;
+      --accent:    #4f8ef7;
+      --accent2:   #a78bfa;
+      --green:     #34d399;
+      --red:       #f87171;
+      --yellow:    #fbbf24;
+      --text:      #e8eaf0;
+      --muted:     #7b88a8;
+      --radius:    14px;
+      --shadow:    0 8px 32px rgba(0,0,0,.45);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
     body {
-      margin: 0;
       font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
     }
 
-    /* ===== NAVBAR ===== */
-    .navbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 20px;
-      background: #0f172a;
-      color: white;
-    }
+    /* ============================================================
+       SCROLLBAR
+    ============================================================ */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
 
-    .logo {
+    /* ============================================================
+       NAV
+    ============================================================ */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 40px;
+      height: 64px;
+      background: rgba(11,15,26,.85);
+      backdrop-filter: blur(18px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
       font-family: 'Syne', sans-serif;
+      font-weight: 800; font-size: 1.3rem;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      letter-spacing: -0.5px;
     }
-
-    .nav-links {
-      list-style: none;
-      display: flex;
-      gap: 20px;
-      margin: 0;
+    .nav-links { display: flex; gap: 8px; }
+    .nav-btn {
+      padding: 8px 18px; border-radius: 8px; border: none; cursor: pointer;
+      font-family: 'DM Sans', sans-serif; font-size: .9rem; font-weight: 500;
+      transition: all .2s;
     }
-
-    .nav-links a {
-      text-decoration: none;
-      color: white;
-      transition: 0.3s;
+    .nav-btn.ghost {
+      background: transparent; color: var(--muted);
     }
-
-    .nav-links a:hover {
-      color: #38bdf8;
+    .nav-btn.ghost:hover { color: var(--text); background: var(--border); }
+    .nav-btn.primary {
+      background: var(--accent); color: #fff;
     }
+    .nav-btn.primary:hover { background: #6a9ef9; transform: translateY(-1px); }
+    .nav-btn.active { background: var(--border); color: var(--text); }
 
-    /* ===== HERO ===== */
+    /* ============================================================
+       HERO
+    ============================================================ */
     .hero {
-      height: 90vh;
-      background: linear-gradient(to right, #1e293b, #0f172a);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      color: white;
+      padding: 140px 40px 80px;
       text-align: center;
-      padding: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; top: -120px; left: 50%; transform: translateX(-50%);
+      width: 700px; height: 700px;
+      background: radial-gradient(circle, rgba(79,142,247,.18) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-tag {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 6px 14px; border-radius: 99px;
+      background: rgba(79,142,247,.12); border: 1px solid rgba(79,142,247,.3);
+      color: var(--accent); font-size: .82rem; font-weight: 500;
+      margin-bottom: 24px;
+      animation: fadeUp .6s ease both;
+    }
+    .hero h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(2.2rem, 5vw, 4rem);
+      font-weight: 800; line-height: 1.12;
+      letter-spacing: -1.5px;
+      animation: fadeUp .6s .1s ease both;
+    }
+    .hero h1 span {
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .hero p {
+      margin: 20px auto 0;
+      max-width: 560px; color: var(--muted); font-size: 1.05rem; line-height: 1.7;
+      animation: fadeUp .6s .2s ease both;
+    }
+    .hero-cta {
+      margin-top: 36px; display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;
+      animation: fadeUp .6s .3s ease both;
+    }
+    .btn {
+      padding: 12px 28px; border-radius: 10px; border: none; cursor: pointer;
+      font-family: 'DM Sans', sans-serif; font-size: .95rem; font-weight: 500;
+      transition: all .25s;
+    }
+    .btn-primary { background: var(--accent); color: #fff; }
+    .btn-primary:hover { background: #6a9ef9; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(79,142,247,.35); }
+    .btn-outline { background: transparent; color: var(--text); border: 1px solid var(--border); }
+    .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+
+    .hero-stats {
+      display: flex; gap: 32px; justify-content: center; flex-wrap: wrap;
+      margin-top: 56px; padding-top: 40px; border-top: 1px solid var(--border);
+      animation: fadeUp .6s .4s ease both;
+    }
+    .stat { text-align: center; }
+    .stat-num {
+      font-family: 'Syne', sans-serif; font-size: 2rem; font-weight: 800;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .stat-label { font-size: .82rem; color: var(--muted); margin-top: 2px; }
+
+    /* ============================================================
+       SECTIONS
+    ============================================================ */
+    section { padding: 80px 40px; max-width: 1200px; margin: 0 auto; }
+    .section-label {
+      font-size: .78rem; font-weight: 600; letter-spacing: 2px;
+      color: var(--accent); text-transform: uppercase; margin-bottom: 12px;
+    }
+    .section-title {
+      font-family: 'Syne', sans-serif; font-size: clamp(1.6rem, 3vw, 2.4rem);
+      font-weight: 800; letter-spacing: -0.5px; margin-bottom: 16px;
+    }
+    .section-sub { color: var(--muted); line-height: 1.7; max-width: 520px; }
+
+    /* ============================================================
+       SERVICES GRID
+    ============================================================ */
+    #services { scroll-margin-top: 80px; }
+    .services-header { margin-bottom: 40px; }
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 16px;
+    }
+    .service-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 28px 24px;
+      cursor: pointer; transition: all .25s;
+      position: relative; overflow: hidden;
+    }
+    .service-card::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(79,142,247,.08), transparent);
+      opacity: 0; transition: opacity .25s;
+    }
+    .service-card:hover { border-color: var(--accent); transform: translateY(-3px); box-shadow: var(--shadow); }
+    .service-card:hover::before { opacity: 1; }
+    .service-card.selected { border-color: var(--accent); background: rgba(79,142,247,.08); }
+    .service-icon { font-size: 2rem; margin-bottom: 14px; }
+    .service-name {
+      font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1.05rem;
+      margin-bottom: 6px;
+    }
+    .service-desc { color: var(--muted); font-size: .88rem; line-height: 1.5; }
+    .service-price {
+      margin-top: 16px; font-weight: 600; color: var(--accent); font-size: .95rem;
     }
 
-    .hero h1 {
-      font-size: 3rem;
+    /* ============================================================
+       BOOKING WIDGET
+    ============================================================ */
+    #reservar { scroll-margin-top: 80px; }
+    .booking-wrapper {
+      display: grid; grid-template-columns: 1fr 360px; gap: 24px; align-items: start;
+    }
+    @media(max-width:900px){ .booking-wrapper { grid-template-columns: 1fr; } }
+
+    .booking-panel {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 32px;
+    }
+    .panel-title {
+      font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1.15rem;
+      margin-bottom: 24px; display: flex; align-items: center; gap: 10px;
+    }
+    .panel-title .dot {
+      width: 8px; height: 8px; border-radius: 50%; background: var(--accent);
+    }
+
+    /* CALENDAR */
+    .calendar-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 20px;
+    }
+    .cal-month {
+      font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1rem;
+    }
+    .cal-nav {
+      background: var(--border); border: none; color: var(--text);
+      width: 32px; height: 32px; border-radius: 8px; cursor: pointer;
+      font-size: 1rem; transition: background .2s; display:flex;align-items:center;justify-content:center;
+    }
+    .cal-nav:hover { background: var(--accent); }
+    .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+    .cal-day-name {
+      text-align: center; font-size: .72rem; font-weight: 600;
+      color: var(--muted); padding: 6px 0; text-transform: uppercase; letter-spacing: .5px;
+    }
+    .cal-day {
+      text-align: center; padding: 9px 4px; border-radius: 8px;
+      font-size: .88rem; cursor: pointer; transition: all .15s;
+      color: var(--text); border: 1px solid transparent;
+    }
+    .cal-day:hover:not(.empty):not(.disabled) { background: var(--border); }
+    .cal-day.empty { cursor: default; }
+    .cal-day.disabled { color: var(--border); cursor: not-allowed; }
+    .cal-day.has-slots { position: relative; }
+    .cal-day.has-slots::after {
+      content: ''; position: absolute; bottom: 3px; left: 50%; transform: translateX(-50%);
+      width: 4px; height: 4px; border-radius: 50%; background: var(--accent);
+    }
+    .cal-day.selected {
+      background: var(--accent); color: #fff; font-weight: 600;
+      border-color: var(--accent);
+    }
+    .cal-day.today { border-color: var(--accent2); color: var(--accent2); }
+
+    /* TIME SLOTS */
+    .slots-section { margin-top: 28px; }
+    .slots-title { font-size: .82rem; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 14px; }
+    .slots-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .slot {
+      padding: 10px 6px; border-radius: 8px; text-align: center;
+      font-size: .85rem; font-weight: 500; cursor: pointer;
+      border: 1px solid var(--border); background: var(--surface);
+      transition: all .15s; color: var(--text);
+    }
+    .slot:hover:not(.taken) { border-color: var(--accent); color: var(--accent); }
+    .slot.selected { background: var(--accent); border-color: var(--accent); color: #fff; }
+    .slot.taken { color: var(--border); cursor: not-allowed; text-decoration: line-through; }
+
+    /* FORM */
+    .booking-form { margin-top: 28px; display: flex; flex-direction: column; gap: 14px; }
+    .form-group { display: flex; flex-direction: column; gap: 6px; }
+    .form-label { font-size: .82rem; font-weight: 500; color: var(--muted); }
+    .form-input, .form-select, .form-textarea {
+      background: var(--surface); border: 1px solid var(--border);
+      color: var(--text); border-radius: 9px; padding: 11px 14px;
+      font-family: 'DM Sans', sans-serif; font-size: .92rem;
+      transition: border-color .2s; outline: none;
+    }
+    .form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--accent); }
+    .form-select option { background: var(--card); }
+    .form-textarea { resize: vertical; min-height: 80px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+    .submit-btn {
+      margin-top: 6px; padding: 14px; border-radius: 10px;
+      background: var(--accent); color: #fff; border: none;
+      font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1rem;
+      cursor: pointer; transition: all .25s; letter-spacing: .3px;
+    }
+    .submit-btn:hover { background: #6a9ef9; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(79,142,247,.35); }
+
+    /* SUMMARY CARD */
+    .summary-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 28px; position: sticky; top: 80px;
+    }
+    .summary-title {
+      font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1rem;
+      margin-bottom: 20px; color: var(--muted);
+    }
+    .summary-item {
+      display: flex; justify-content: space-between; align-items: flex-start;
+      padding: 12px 0; border-bottom: 1px solid var(--border);
+      font-size: .88rem;
+    }
+    .summary-item:last-of-type { border-bottom: none; }
+    .summary-key { color: var(--muted); }
+    .summary-val { font-weight: 500; text-align: right; max-width: 160px; }
+    .summary-total {
+      margin-top: 16px; padding-top: 16px; border-top: 2px solid var(--border);
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .summary-total-label { font-family: 'Syne', sans-serif; font-weight: 700; }
+    .summary-total-price {
+      font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.4rem;
+      color: var(--accent);
+    }
+    .summary-placeholder {
+      text-align: center; color: var(--muted); font-size: .88rem;
+      padding: 20px 0; line-height: 1.6;
+    }
+
+    /* ============================================================
+       CONFIRMATION MODAL
+    ============================================================ */
+    .modal-overlay {
+      position: fixed; inset: 0; z-index: 200;
+      background: rgba(0,0,0,.7); backdrop-filter: blur(6px);
+      display: flex; align-items: center; justify-content: center;
+      padding: 20px;
+      opacity: 0; pointer-events: none; transition: opacity .3s;
+    }
+    .modal-overlay.active { opacity: 1; pointer-events: all; }
+    .modal {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 20px; padding: 40px; max-width: 460px; width: 100%;
+      transform: translateY(30px); transition: transform .3s;
+      text-align: center;
+    }
+    .modal-overlay.active .modal { transform: translateY(0); }
+    .modal-icon { font-size: 3.5rem; margin-bottom: 16px; animation: pop .5s ease; }
+    .modal-title {
+      font-family: 'Syne', sans-serif; font-size: 1.5rem; font-weight: 800;
       margin-bottom: 10px;
     }
+    .modal-sub { color: var(--muted); line-height: 1.6; margin-bottom: 28px; font-size: .95rem; }
+    .modal-code {
+      background: var(--surface); border: 1px dashed var(--border);
+      border-radius: 10px; padding: 14px; font-size: 1.3rem; font-weight: 700;
+      letter-spacing: 4px; color: var(--accent); margin-bottom: 28px;
+      font-family: monospace;
+    }
+    .modal-close {
+      padding: 12px 32px; border-radius: 10px;
+      background: var(--accent); color: #fff; border: none;
+      font-family: 'Syne', sans-serif; font-weight: 700; font-size: .95rem;
+      cursor: pointer; transition: all .2s;
+    }
+    .modal-close:hover { background: #6a9ef9; }
 
-    .hero p {
-      font-size: 1.2rem;
+    /* ============================================================
+       DASHBOARD / ADMIN PANEL
+    ============================================================ */
+    #panel { scroll-margin-top: 80px; display: none; }
+    #panel.active { display: block; }
+    .dashboard-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 16px; margin-bottom: 32px;
+    }
+    .kpi-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 24px;
+    }
+    .kpi-label { font-size: .82rem; color: var(--muted); margin-bottom: 10px; }
+    .kpi-value {
+      font-family: 'Syne', sans-serif; font-size: 2rem; font-weight: 800;
+    }
+    .kpi-value.green { color: var(--green); }
+    .kpi-value.blue { color: var(--accent); }
+    .kpi-value.purple { color: var(--accent2); }
+    .kpi-value.yellow { color: var(--yellow); }
+    .kpi-change { font-size: .78rem; color: var(--green); margin-top: 4px; }
+
+    .table-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius); overflow: hidden;
+    }
+    .table-header {
+      padding: 20px 24px; border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .table-title { font-family: 'Syne', sans-serif; font-weight: 700; }
+    .filter-btns { display: flex; gap: 6px; }
+    .filter-btn {
+      padding: 5px 12px; border-radius: 6px; border: 1px solid var(--border);
+      background: transparent; color: var(--muted); font-size: .78rem;
+      cursor: pointer; transition: all .2s;
+    }
+    .filter-btn:hover, .filter-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+    table { width: 100%; border-collapse: collapse; }
+    th {
+      padding: 12px 24px; text-align: left; font-size: .75rem;
+      font-weight: 600; color: var(--muted); text-transform: uppercase;
+      letter-spacing: .8px; border-bottom: 1px solid var(--border);
+    }
+    td { padding: 14px 24px; font-size: .88rem; border-bottom: 1px solid var(--border); }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: rgba(255,255,255,.02); }
+
+    .badge {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 3px 10px; border-radius: 99px; font-size: .75rem; font-weight: 600;
+    }
+    .badge-green { background: rgba(52,211,153,.15); color: var(--green); }
+    .badge-yellow { background: rgba(251,191,36,.15); color: var(--yellow); }
+    .badge-red { background: rgba(248,113,113,.15); color: var(--red); }
+    .badge-blue { background: rgba(79,142,247,.15); color: var(--accent); }
+
+    .action-btn {
+      padding: 5px 12px; border-radius: 6px; border: 1px solid var(--border);
+      background: transparent; color: var(--muted); font-size: .78rem;
+      cursor: pointer; transition: all .2s; margin-left: 4px;
+    }
+    .action-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .action-btn.danger:hover { border-color: var(--red); color: var(--red); }
+
+    /* CHART */
+    .chart-row { display: grid; grid-template-columns: 1fr 340px; gap: 16px; margin-top: 24px; }
+    @media(max-width:900px){ .chart-row { grid-template-columns: 1fr; } }
+    .chart-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 24px;
+    }
+    .chart-title { font-family: 'Syne', sans-serif; font-weight: 700; margin-bottom: 20px; }
+    .bar-chart { display: flex; align-items: flex-end; gap: 10px; height: 140px; }
+    .bar-col { display: flex; flex-direction: column; align-items: center; gap: 6px; flex: 1; }
+    .bar {
+      width: 100%; border-radius: 6px 6px 0 0;
+      background: linear-gradient(to top, var(--accent), var(--accent2));
+      transition: height .5s cubic-bezier(.34,1.56,.64,1);
+      min-height: 4px;
+    }
+    .bar-label { font-size: .72rem; color: var(--muted); }
+
+    .pie-legend { display: flex; flex-direction: column; gap: 14px; }
+    .legend-item { display: flex; align-items: center; gap: 12px; }
+    .legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+    .legend-name { font-size: .88rem; flex: 1; }
+    .legend-pct { font-weight: 600; font-size: .88rem; }
+
+    /* ============================================================
+       HOW IT WORKS
+    ============================================================ */
+    .steps { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 24px; }
+    .step {
+      text-align: center; padding: 32px 20px;
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius); position: relative; overflow: hidden;
+    }
+    .step-num {
+      font-family: 'Syne', sans-serif; font-size: 4rem; font-weight: 800;
+      color: rgba(79,142,247,.08); position: absolute; top: 8px; right: 16px;
+      line-height: 1;
+    }
+    .step-icon { font-size: 1.8rem; margin-bottom: 14px; }
+    .step-title { font-family: 'Syne', sans-serif; font-weight: 700; margin-bottom: 8px; }
+    .step-desc { color: var(--muted); font-size: .88rem; line-height: 1.6; }
+
+    /* ============================================================
+       FOOTER
+    ============================================================ */
+    footer {
+      border-top: 1px solid var(--border); padding: 40px;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 16px; color: var(--muted); font-size: .85rem;
+      max-width: 1200px; margin: 0 auto;
+    }
+    .footer-logo {
+      font-family: 'Syne', sans-serif; font-weight: 800;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
     }
 
-    .hero button {
-      margin-top: 20px;
-      padding: 12px 25px;
-      border: none;
-      background: #38bdf8;
-      color: black;
-      font-weight: bold;
-      cursor: pointer;
-      border-radius: 5px;
-      transition: 0.3s;
+    /* ============================================================
+       TOAST
+    ============================================================ */
+    .toast-container { position: fixed; bottom: 24px; right: 24px; z-index: 300; display: flex; flex-direction: column; gap: 10px; }
+    .toast {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 10px; padding: 14px 18px;
+      display: flex; align-items: center; gap: 10px;
+      box-shadow: var(--shadow); font-size: .88rem;
+      transform: translateX(120%); transition: transform .3s;
+      min-width: 260px;
+    }
+    .toast.show { transform: translateX(0); }
+    .toast-icon { font-size: 1.2rem; }
+
+    /* ============================================================
+       ANIMATIONS
+    ============================================================ */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes pop {
+      0%   { transform: scale(0); }
+      70%  { transform: scale(1.15); }
+      100% { transform: scale(1); }
     }
 
-    .hero button:hover {
-      background: #0ea5e9;
-      transform: scale(1.05);
+    /* ============================================================
+       RESPONSIVE
+    ============================================================ */
+    @media(max-width:640px){
+      nav { padding: 0 20px; }
+      .hero { padding: 120px 20px 60px; }
+      section { padding: 60px 20px; }
+      .form-row { grid-template-columns: 1fr; }
+      .slots-grid { grid-template-columns: repeat(2, 1fr); }
     }
-
-    /* ===== SERVICES ===== */
-    .services {
-      padding: 60px 20px;
-      text-align: center;
-      background: #f8fafc;
-    }
-
-    .services h2 {
-      font-size: 2rem;
-      margin-bottom: 40px;
-      font-family: 'Syne', sans-serif;
-    }
-
-    .cards {
-      display: flex;
-      gap: 30px;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
-
-    .card {
-      background: white;
-      width: 300px;
-      border-radius: 10px;
-      overflow: hidden;
-      box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-      transition: 0.3s;
-      cursor: pointer;
-    }
-
-    .card img {
-      width: 100%;
-      height: 200px;
-      object-fit: cover;
-    }
-
-    .card h3 {
-      margin: 15px 0 10px;
-    }
-
-    .card p {
-      padding: 0 15px 20px;
-      color: #555;
-    }
-
-    .card:hover {
-      transform: translateY(-10px);
-      box-shadow: 0 20px 30px rgba(0,0,0,0.2);
-    }
-
-    /* ===== DETAILS ===== */
-    .details {
-      padding: 60px 20px;
-      background: #0f172a;
-      color: white;
-      text-align: center;
-    }
-
-    .details-content {
-      max-width: 600px;
-      margin: auto;
-    }
-
   </style>
 </head>
-
 <body>
 
-  <!-- NAVBAR -->
-  <header>
-    <nav class="navbar">
-      <h2 class="logo">BookSmart</h2>
-      <ul class="nav-links">
-        <li><a href="#">Inicio</a></li>
-        <li><a href="#">Servicios</a></li>
-        <li><a href="#">Contacto</a></li>
-      </ul>
-    </nav>
-  </header>
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">📅 BookSmart</div>
+  <div class="nav-links">
+    <button class="nav-btn ghost" onclick="scrollTo('#servicios')">Servicios</button>
+    <button class="nav-btn ghost" onclick="scrollTo('#como-funciona')">¿Cómo funciona?</button>
+    <button class="nav-btn ghost" onclick="scrollTo('#reservar')">Reservar</button>
+    <button class="nav-btn primary" onclick="togglePanel()">Panel Admin</button>
+  </div>
+</nav>
 
-  <!-- HERO -->
-  <section class="hero">
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-tag">✨ Reservas inteligentes con IA</div>
+  <h1>Agenda tu cita en<br/><span>segundos, no minutos</span></h1>
+  <p>Plataforma de reservas para barberías, gimnasios, médicos y consultores. Calendario en tiempo real, confirmaciones automáticas y panel del dueño incluidos.</p>
+  <div class="hero-cta">
+    <button class="btn btn-primary" onclick="scrollTo('#reservar')">Reservar ahora →</button>
+    <button class="btn btn-outline" onclick="scrollTo('#servicios')">Ver servicios</button>
+  </div>
+  <div class="hero-stats">
+    <div class="stat">
+      <div class="stat-num">2,400+</div>
+      <div class="stat-label">Citas gestionadas</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">98%</div>
+      <div class="stat-label">Clientes satisfechos</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">4</div>
+      <div class="stat-label">Tipos de negocio</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">24/7</div>
+      <div class="stat-label">Disponible siempre</div>
+    </div>
+  </div>
+</div>
+
+<!-- SERVICIOS -->
+<section id="servicios">
+  <div class="services-header">
+    <div class="section-label">Especialidades</div>
+    <div class="section-title">¿Qué tipo de negocio eres?</div>
+    <div class="section-sub">Selecciona tu servicio y te mostraremos los horarios disponibles en tiempo real.</div>
+  </div>
+  <div class="services-grid" id="servicesGrid">
+    <div class="service-card" data-service="Barbería" data-price="50" onclick="selectService(this)">
+      <div class="service-icon">✂️</div>
+      <div class="service-name">Barbería</div>
+      <div class="service-desc">Corte, barba, degradado, tratamientos capilares y más.</div>
+      <div class="service-price">Desde Bs. 50</div>
+    </div>
+    <div class="service-card" data-service="Gimnasio" data-price="80" onclick="selectService(this)">
+      <div class="service-icon">🏋️</div>
+      <div class="service-name">Gimnasio</div>
+      <div class="service-desc">Sesiones personalizadas, clases grupales, nutrición deportiva.</div>
+      <div class="service-price">Desde Bs. 80</div>
+    </div>
+    <div class="service-card" data-service="Médico" data-price="120" onclick="selectService(this)">
+      <div class="service-icon">🩺</div>
+      <div class="service-name">Médico</div>
+      <div class="service-desc">Consultas generales, especialidades, control de citas médicas.</div>
+      <div class="service-price">Desde Bs. 120</div>
+    </div>
+    <div class="service-card" data-service="Consultor" data-price="200" onclick="selectService(this)">
+      <div class="service-icon">💼</div>
+      <div class="service-name">Consultor</div>
+      <div class="service-desc">Asesoría legal, financiera, empresarial o tecnológica.</div>
+      <div class="service-price">Desde Bs. 200</div>
+    </div>
+  </div>
+</section>
+
+<!-- CÓMO FUNCIONA -->
+<section id="como-funciona">
+  <div style="margin-bottom:40px;">
+    <div class="section-label">Proceso</div>
+    <div class="section-title">Reserva en 4 pasos simples</div>
+  </div>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-icon">🎯</div>
+      <div class="step-title">Elige el servicio</div>
+      <div class="step-desc">Selecciona el tipo de negocio y el servicio que necesitas.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-icon">📅</div>
+      <div class="step-title">Escoge la fecha</div>
+      <div class="step-desc">Ve la disponibilidad en tiempo real en el calendario.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-icon">⏰</div>
+      <div class="step-title">Selecciona el horario</div>
+      <div class="step-desc">Elige el horario que mejor se adapte a tu agenda.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-icon">✅</div>
+      <div class="step-title">Confirmación</div>
+      <div class="step-desc">Recibe tu código de reserva y un resumen de tu cita.</div>
+    </div>
+  </div>
+</section>
+
+<!-- RESERVAR -->
+<section id="reservar">
+  <div style="margin-bottom:40px;">
+    <div class="section-label">Reservas</div>
+    <div class="section-title">Agenda tu cita</div>
+    <div class="section-sub">Selecciona fecha y horario disponible. La confirmación es inmediata.</div>
+  </div>
+  <div class="booking-wrapper">
+    <!-- LEFT: Calendar + Form -->
+    <div style="display:flex;flex-direction:column;gap:20px;">
+      <!-- Calendar -->
+      <div class="booking-panel">
+        <div class="panel-title"><span class="dot"></span> Calendario</div>
+        <div class="calendar-header">
+          <button class="cal-nav" onclick="changeMonth(-1)">‹</button>
+          <div class="cal-month" id="calMonth"></div>
+          <button class="cal-nav" onclick="changeMonth(1)">›</button>
+        </div>
+        <div class="cal-grid" id="calGrid"></div>
+        <!-- Time Slots -->
+        <div class="slots-section" id="slotsSection" style="display:none;">
+          <div class="slots-title">Horarios disponibles</div>
+          <div class="slots-grid" id="slotsGrid"></div>
+        </div>
+      </div>
+      <!-- Form -->
+      <div class="booking-panel">
+        <div class="panel-title"><span class="dot"></span> Tus datos</div>
+        <div class="booking-form">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Nombre</label>
+              <input class="form-input" id="fName" type="text" placeholder="Tu nombre"/>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Apellido</label>
+              <input class="form-input" id="fLastname" type="text" placeholder="Apellido"/>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Correo electrónico</label>
+            <input class="form-input" id="fEmail" type="email" placeholder="correo@ejemplo.com"/>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Teléfono / WhatsApp</label>
+            <input class="form-input" id="fPhone" type="tel" placeholder="+591 7XXXXXXX"/>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Especialista preferido</label>
+            <select class="form-select" id="fSpecialist">
+              <option value="">Sin preferencia</option>
+              <option>Dr. Rodríguez</option>
+              <option>Lic. García</option>
+              <option>Esp. Morales</option>
+              <option>Esp. Chávez</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Notas adicionales</label>
+            <textarea class="form-textarea" id="fNotes" placeholder="¿Alguna indicación especial?"></textarea>
+          </div>
+          <button class="submit-btn" onclick="submitBooking()">Confirmar reserva →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: Summary -->
+    <div class="summary-card">
+      <div class="summary-title">Resumen de tu reserva</div>
+      <div id="summaryContent">
+        <div class="summary-placeholder">Selecciona un servicio, fecha y horario para ver el resumen de tu reserva aquí.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ADMIN PANEL -->
+<section id="panel">
+  <div style="margin-bottom:32px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;">
     <div>
-      <h1>Reserva inteligente en segundos</h1>
-      <p>Optimiza tu tiempo con nuestra plataforma moderna</p>
-      <button>Comenzar</button>
+      <div class="section-label">Panel de administración</div>
+      <div class="section-title">Dashboard del dueño</div>
     </div>
-  </section>
+    <button class="btn btn-outline" onclick="togglePanel()">← Volver al sitio</button>
+  </div>
 
-  <!-- SERVICES -->
-  <section class="services">
-    <h2>Nuestros Servicios</h2>
-
-    <div class="cards">
-
-      <div class="card" onclick="mostrarInfo('Reservas rápidas', 'Agenda tus citas en segundos con nuestro sistema optimizado.')">
-        <img src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d">
-        <h3>Reservas rápidas</h3>
-        <p>Agenda en segundos sin complicaciones</p>
-      </div>
-
-      <div class="card" onclick="mostrarInfo('Gestión inteligente', 'Organiza automáticamente tus horarios y evita conflictos.')">
-        <img src="https://images.unsplash.com/photo-1556740749-887f6717d7e4">
-        <h3>Gestión inteligente</h3>
-        <p>Organiza tus citas automáticamente</p>
-      </div>
-
-      <div class="card" onclick="mostrarInfo('Optimización', 'Mejora tu productividad con análisis inteligentes.')">
-        <img src="https://images.unsplash.com/photo-1519389950473-47ba0277781c">
-        <h3>Optimización</h3>
-        <p>Mejora tu productividad diaria</p>
-      </div>
-
+  <!-- KPIs -->
+  <div class="dashboard-grid">
+    <div class="kpi-card">
+      <div class="kpi-label">Reservas hoy</div>
+      <div class="kpi-value blue" id="kpiToday">0</div>
+      <div class="kpi-change">↑ Actualizado</div>
     </div>
-  </section>
-
-  <!-- DETAILS -->
-  <section class="details" id="details">
-    <div class="details-content" id="details-content">
-      <h2>Selecciona un servicio</h2>
-      <p>Haz clic en una tarjeta para ver más información aquí.</p>
+    <div class="kpi-card">
+      <div class="kpi-label">Total este mes</div>
+      <div class="kpi-value green">48</div>
+      <div class="kpi-change">↑ +12% vs mes anterior</div>
     </div>
-  </section>
+    <div class="kpi-card">
+      <div class="kpi-label">Ingresos del mes</div>
+      <div class="kpi-value purple">Bs. 5,760</div>
+      <div class="kpi-change">↑ +8% vs mes anterior</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Cancelaciones</div>
+      <div class="kpi-value yellow">3</div>
+      <div class="kpi-change">↓ -2 vs mes anterior</div>
+    </div>
+  </div>
 
-  <!-- JS -->
-  <script>
-    function mostrarInfo(titulo, descripcion) {
-      const contenedor = document.getElementById("details-content");
+  <!-- Charts -->
+  <div class="chart-row">
+    <div class="chart-card">
+      <div class="chart-title">Reservas por semana</div>
+      <div class="bar-chart" id="barChart"></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">Servicios más solicitados</div>
+      <div class="pie-legend">
+        <div class="legend-item"><div class="legend-dot" style="background:var(--accent)"></div><div class="legend-name">Barbería</div><div class="legend-pct">38%</div></div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--accent2)"></div><div class="legend-name">Gimnasio</div><div class="legend-pct">27%</div></div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--green)"></div><div class="legend-name">Médico</div><div class="legend-pct">21%</div></div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--yellow)"></div><div class="legend-name">Consultor</div><div class="legend-pct">14%</div></div>
+      </div>
+    </div>
+  </div>
 
-      contenedor.innerHTML = `
-        <h2>${titulo}</h2>
-        <p>${descripcion}</p>
-      `;
+  <!-- Table -->
+  <div class="table-card" style="margin-top:24px;">
+    <div class="table-header">
+      <div class="table-title">Reservas recientes</div>
+      <div class="filter-btns">
+        <button class="filter-btn active" onclick="filterTable('todas',this)">Todas</button>
+        <button class="filter-btn" onclick="filterTable('confirmada',this)">Confirmadas</button>
+        <button class="filter-btn" onclick="filterTable('pendiente',this)">Pendientes</button>
+        <button class="filter-btn" onclick="filterTable('cancelada',this)">Canceladas</button>
+      </div>
+    </div>
+    <div style="overflow-x:auto;">
+      <table>
+        <thead>
+          <tr>
+            <th>Código</th>
+            <th>Cliente</th>
+            <th>Servicio</th>
+            <th>Fecha & Hora</th>
+            <th>Especialista</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody id="adminTable"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
 
-      document.getElementById("details").scrollIntoView({
-        behavior: "smooth"
-      });
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">📅 BookSmart</div>
+  <div>© 2025 BookSmart. Plataforma de reservas inteligente.</div>
+  <div>Hecho con ❤️ para tu negocio</div>
+</footer>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <div class="modal-icon">🎉</div>
+    <div class="modal-title">¡Reserva confirmada!</div>
+    <div class="modal-sub">Tu cita ha sido agendada exitosamente. Guarda tu código de reserva.</div>
+    <div class="modal-code" id="modalCode">BS-0000</div>
+    <button class="modal-close" onclick="closeModal()">Perfecto, gracias →</button>
+  </div>
+</div>
+
+<!-- TOASTS -->
+<div class="toast-container" id="toastContainer"></div>
+
+<script>
+/* ============================================================
+   STATE
+============================================================ */
+const state = {
+  selectedService: null,
+  selectedPrice: 0,
+  selectedDate: null,
+  selectedSlot: null,
+  currentYear: new Date().getFullYear(),
+  currentMonth: new Date().getMonth(),
+  bookings: [
+    { code:'BS-1042', client:'Carlos Mendoza', service:'Barbería', datetime:'19 May, 09:00', specialist:'Esp. Morales', status:'confirmada' },
+    { code:'BS-1041', client:'María Torres', service:'Médico', datetime:'19 May, 10:30', specialist:'Dr. Rodríguez', status:'confirmada' },
+    { code:'BS-1040', client:'Luís Quiroga', service:'Gimnasio', datetime:'18 May, 07:00', specialist:'Esp. Chávez', status:'pendiente' },
+    { code:'BS-1039', client:'Ana Flores', service:'Consultor', datetime:'17 May, 15:00', specialist:'Lic. García', status:'cancelada' },
+    { code:'BS-1038', client:'Roberto Paz', service:'Barbería', datetime:'17 May, 11:00', specialist:'Esp. Morales', status:'confirmada' },
+  ]
+};
+
+// Taken slots per day-key
+const takenSlots = {
+  '0': ['09:00','10:30','14:00'],
+  '3': ['08:00','11:00'],
+  '7': ['09:30','13:00','16:00'],
+  '12': ['10:00'],
+};
+
+const ALL_SLOTS = ['08:00','09:00','09:30','10:00','10:30','11:00','12:00','13:00','14:00','15:00','16:00','17:00'];
+
+/* ============================================================
+   NAV SCROLL
+============================================================ */
+function scrollTo(id) {
+  document.querySelector(id).scrollIntoView({ behavior:'smooth' });
+}
+
+/* ============================================================
+   PANEL TOGGLE
+============================================================ */
+function togglePanel() {
+  const panel = document.getElementById('panel');
+  const isActive = panel.classList.toggle('active');
+  if (isActive) {
+    renderAdminTable('todas');
+    renderBarChart();
+    updateKpiToday();
+    panel.scrollIntoView({ behavior:'smooth' });
+  }
+}
+
+/* ============================================================
+   SERVICE SELECTION
+============================================================ */
+function selectService(el) {
+  document.querySelectorAll('.service-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  state.selectedService = el.dataset.service;
+  state.selectedPrice = parseInt(el.dataset.price);
+  updateSummary();
+  showToast('✅', `Servicio "${state.selectedService}" seleccionado`);
+  setTimeout(() => scrollTo('#reservar'), 300);
+}
+
+/* ============================================================
+   CALENDAR
+============================================================ */
+const MONTHS = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+const DAYS = ['Do','Lu','Ma','Mi','Ju','Vi','Sá'];
+
+function renderCalendar() {
+  const { currentYear: y, currentMonth: m } = state;
+  document.getElementById('calMonth').textContent = `${MONTHS[m]} ${y}`;
+  const grid = document.getElementById('calGrid');
+  grid.innerHTML = '';
+  DAYS.forEach(d => {
+    const el = document.createElement('div');
+    el.className = 'cal-day-name'; el.textContent = d;
+    grid.appendChild(el);
+  });
+  const firstDay = new Date(y, m, 1).getDay();
+  const daysInMonth = new Date(y, m+1, 0).getDate();
+  const today = new Date();
+
+  for (let i=0; i<firstDay; i++) {
+    const el = document.createElement('div'); el.className = 'cal-day empty';
+    grid.appendChild(el);
+  }
+  for (let d=1; d<=daysInMonth; d++) {
+    const el = document.createElement('div');
+    el.className = 'cal-day';
+    el.textContent = d;
+    const date = new Date(y, m, d);
+    if (date < new Date(today.getFullYear(), today.getMonth(), today.getDate())) {
+      el.classList.add('disabled');
+    } else {
+      if (takenSlots[String(d)]) el.classList.add('has-slots');
+      if (today.getDate()===d && today.getMonth()===m && today.getFullYear()===y) el.classList.add('today');
+      if (state.selectedDate && state.selectedDate.d===d && state.selectedDate.m===m && state.selectedDate.y===y) el.classList.add('selected');
+      el.onclick = () => selectDate(d, m, y);
     }
-  </script>
+    grid.appendChild(el);
+  }
+}
 
+function changeMonth(dir) {
+  state.currentMonth += dir;
+  if (state.currentMonth > 11) { state.currentMonth = 0; state.currentYear++; }
+  if (state.currentMonth < 0)  { state.currentMonth = 11; state.currentYear--; }
+  renderCalendar();
+}
+
+function selectDate(d, m, y) {
+  state.selectedDate = { d, m, y };
+  state.selectedSlot = null;
+  renderCalendar();
+  renderSlots(d);
+  updateSummary();
+}
+
+/* ============================================================
+   SLOTS
+============================================================ */
+function renderSlots(day) {
+  const sec = document.getElementById('slotsSection');
+  const grid = document.getElementById('slotsGrid');
+  sec.style.display = 'block';
+  grid.innerHTML = '';
+  const taken = takenSlots[String(day)] || [];
+  ALL_SLOTS.forEach(t => {
+    const el = document.createElement('div');
+    el.className = 'slot' + (taken.includes(t) ? ' taken' : '');
+    el.textContent = t;
+    if (!taken.includes(t)) el.onclick = () => selectSlot(el, t);
+    grid.appendChild(el);
+  });
+}
+
+function selectSlot(el, time) {
+  document.querySelectorAll('.slot').forEach(s => s.classList.remove('selected'));
+  el.classList.add('selected');
+  state.selectedSlot = time;
+  updateSummary();
+}
+
+/* ============================================================
+   SUMMARY
+============================================================ */
+function updateSummary() {
+  const cont = document.getElementById('summaryContent');
+  if (!state.selectedService && !state.selectedDate && !state.selectedSlot) {
+    cont.innerHTML = '<div class="summary-placeholder">Selecciona un servicio, fecha y horario para ver el resumen de tu reserva aquí.</div>';
+    return;
+  }
+  const dateStr = state.selectedDate
+    ? `${state.selectedDate.d} de ${MONTHS[state.selectedDate.m]} ${state.selectedDate.y}`
+    : '–';
+  cont.innerHTML = `
+    <div class="summary-item"><span class="summary-key">Servicio</span><span class="summary-val">${state.selectedService||'–'}</span></div>
+    <div class="summary-item"><span class="summary-key">Fecha</span><span class="summary-val">${dateStr}</span></div>
+    <div class="summary-item"><span class="summary-key">Horario</span><span class="summary-val">${state.selectedSlot||'–'}</span></div>
+    <div class="summary-item"><span class="summary-key">Duración est.</span><span class="summary-val">45–60 min</span></div>
+    <div class="summary-total">
+      <span class="summary-total-label">Total estimado</span>
+      <span class="summary-total-price">Bs. ${state.selectedPrice||'–'}</span>
+    </div>
+  `;
+}
+
+/* ============================================================
+   BOOKING SUBMIT
+============================================================ */
+function submitBooking() {
+  const name = document.getElementById('fName').value.trim();
+  const email = document.getElementById('fEmail').value.trim();
+  if (!state.selectedService) { showToast('⚠️','Selecciona un servicio primero'); return; }
+  if (!state.selectedDate)    { showToast('⚠️','Selecciona una fecha'); return; }
+  if (!state.selectedSlot)    { showToast('⚠️','Selecciona un horario'); return; }
+  if (!name)                  { showToast('⚠️','Ingresa tu nombre'); return; }
+  if (!email)                 { showToast('⚠️','Ingresa tu correo'); return; }
+
+  const code = 'BS-' + (1000 + Math.floor(Math.random()*9000));
+  document.getElementById('modalCode').textContent = code;
+
+  // Add to admin table
+  const specialist = document.getElementById('fSpecialist').value || 'Sin preferencia';
+  const dateStr = `${state.selectedDate.d} ${MONTHS[state.selectedDate.m].substring(0,3)}, ${state.selectedSlot}`;
+  state.bookings.unshift({ code, client: name, service: state.selectedService, datetime: dateStr, specialist, status:'confirmada' });
+  state.kpiToday = (state.kpiToday||0) + 1;
+
+  document.getElementById('modal').classList.add('active');
+}
+
+function closeModal() {
+  document.getElementById('modal').classList.remove('active');
+  // Reset
+  state.selectedService = null; state.selectedDate = null; state.selectedSlot = null; state.selectedPrice = 0;
+  document.querySelectorAll('.service-card').forEach(c => c.classList.remove('selected'));
+  document.getElementById('slotsSection').style.display = 'none';
+  document.getElementById('fName').value=''; document.getElementById('fLastname').value='';
+  document.getElementById('fEmail').value=''; document.getElementById('fPhone').value='';
+  document.getElementById('fNotes').value=''; document.getElementById('fSpecialist').value='';
+  updateSummary(); renderCalendar();
+  showToast('🎉','¡Reserva registrada exitosamente!');
+}
+
+/* ============================================================
+   ADMIN TABLE
+============================================================ */
+const STATUS_BADGE = {
+  confirmada: 'badge-green',
+  pendiente:  'badge-yellow',
+  cancelada:  'badge-red',
+};
+
+function renderAdminTable(filter) {
+  const tbody = document.getElementById('adminTable');
+  const rows = filter === 'todas' ? state.bookings : state.bookings.filter(b => b.status === filter);
+  tbody.innerHTML = rows.map(b => `
+    <tr>
+      <td><span style="font-family:monospace;color:var(--accent);font-size:.82rem;">${b.code}</span></td>
+      <td>${b.client}</td>
+      <td>${b.service}</td>
+      <td>${b.datetime}</td>
+      <td>${b.specialist}</td>
+      <td><span class="badge ${STATUS_BADGE[b.status]}">${b.status}</span></td>
+      <td>
+        <button class="action-btn" onclick="changeStatus('${b.code}','confirmada')">✓</button>
+        <button class="action-btn" onclick="changeStatus('${b.code}','pendiente')">⏳</button>
+        <button class="action-btn danger" onclick="changeStatus('${b.code}','cancelada')">✕</button>
+      </td>
+    </tr>
+  `).join('');
+}
+
+function filterTable(f, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderAdminTable(f);
+}
+
+function changeStatus(code, newStatus) {
+  const b = state.bookings.find(x => x.code === code);
+  if (b) { b.status = newStatus; renderAdminTable('todas'); showToast('✅',`Estado actualizado a "${newStatus}"`); }
+}
+
+/* ============================================================
+   CHARTS
+============================================================ */
+const barData = [
+  {label:'Sem 1', val:32},
+  {label:'Sem 2', val:48},
+  {label:'Sem 3', val:41},
+  {label:'Sem 4', val:56},
+  {label:'Sem 5', val:38},
+];
+const maxVal = Math.max(...barData.map(d=>d.val));
+
+function renderBarChart() {
+  const chart = document.getElementById('barChart');
+  chart.innerHTML = barData.map(d => `
+    <div class="bar-col">
+      <div class="bar" style="height:${(d.val/maxVal)*120}px" title="${d.val} reservas"></div>
+      <div class="bar-label">${d.label}</div>
+    </div>
+  `).join('');
+}
+
+function updateKpiToday() {
+  document.getElementById('kpiToday').textContent = state.bookings.filter(b => {
+    const today = new Date();
+    return b.datetime.includes(`${today.getDate()} ${MONTHS[today.getMonth()].substring(0,3)}`);
+  }).length + (state.kpiToday||0);
+}
+
+/* ============================================================
+   TOAST
+============================================================ */
+function showToast(icon, msg) {
+  const cont = document.getElementById('toastContainer');
+  const t = document.createElement('div');
+  t.className = 'toast';
+  t.innerHTML = `<span class="toast-icon">${icon}</span><span>${msg}</span>`;
+  cont.appendChild(t);
+  requestAnimationFrame(() => t.classList.add('show'));
+  setTimeout(() => { t.classList.remove('show'); setTimeout(()=>t.remove(), 300); }, 3000);
+}
+
+/* ============================================================
+   INIT
+============================================================ */
+renderCalendar();
+</script>
 </body>
 </html>
